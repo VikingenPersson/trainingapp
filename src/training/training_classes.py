@@ -25,8 +25,9 @@ class Workout:
 
 
 class Exercise:
-    def __init__(self, input_weight=0, input_sets=None, input_muscle_group="", input_rir=3):
+    def __init__(self,input_name="", input_weight=0, input_sets=None, input_muscle_group="", input_rir=3):
         input_sets = [ExerciseSet()] if input_sets is None else input_sets
+        self.name = input_name
         self.weight = float(input_weight)
         self.sets = input_sets
         self.muscle_group = input_muscle_group
