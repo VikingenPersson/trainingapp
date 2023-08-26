@@ -9,34 +9,39 @@ import atexit
 import dill
 
 
-def exit_handler():
-    save_to_file(workout_plans)
-
-
-atexit.register(exit_handler)
+def exit_handler(workouts_to_save):
+    save_to_file(workouts_to_save)
 
 
 def save_to_file(workout):
-    with open("workout_plans.pkl", "wb") as save_file:
+    with open("saves/workout_plans.pkl", "wb") as save_file:
         dill.dump(workout, save_file)
 
 
-workout_plans = []
+def load_from_file():
+    with open("saves/workout_plans.pkl", "rb") as load_file:
+        return dill.load(load_file)
 
 
-def main(input_plans):
-    workout_plans_main = input_plans
+def first_workout_plan():
+    print("Looks like you don\'t have a workout plan yet, lets create one")
+    return create_workout_plan()
+
+
+def main():
+    workout_plans = []
+    atexit.register(exit_handler, workout_plans)
     try:
-        with open("workout_plans.pkl", "rb") as load_file:
-            workout_plans_main = dill.load(load_file)
+        workout_plans_list = load_from_file()
+        for workout_plan in workout_plans_list:
+            workout_plans.append(workout_plan)
+        del workout_plans_list
     except FileNotFoundError:
-        print("Looks like you don\'t have a workout plan yet, lets create one")
-        workout_plans_main.append(create_workout_plan())
-    if not workout_plans_main:
-        print("Looks like you don\'t have a workout plan yet, lets create one")
-        workout_plans_main.append(create_workout_plan())
-    print(workout_plans_main[0].workouts[0].exercises[0].name)
+        workout_plans.append(first_workout_plan())
+    if not workout_plans:
+        workout_plans.append(first_workout_plan())
     input("Press enter to exit")
 
 
-main(workout_plans)
+if __name__ == "__main__":
+    main()
