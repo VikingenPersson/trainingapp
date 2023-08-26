@@ -87,7 +87,7 @@ def create_exercise():
     return Exercise(input_name=input_name, input_muscle_group=input_muscle, input_sets=list_of_sets)
 
 def create_workout():
-    day = select_day()
+    day = available_days[select_day()]
     exercises = []
     exercises.append(create_exercise())
     while True:
@@ -129,3 +129,31 @@ def create_workout_plan():
         else:
             break
     return WorkoutPlan(input_name=name,input_workouts=list_workouts, input_length=length_of_plan)
+
+
+# Visual functions for printing in terminal
+
+def print_set(input_set):
+    print(f"reps:               {input_set.reps}")
+
+
+def print_exercise(input_exercise):
+    print(f"Exercise:   {input_exercise.name}   {input_exercise.muscle_group}")
+    print(f"Weight: {input_exercise.weight}     |        rir={input_exercise.rir}")
+    for wset in input_exercise.sets:
+        print_set(wset)
+    print("-----------------------------------------------------------------------------------------------------------")
+
+
+def print_workout(input_workout):
+    print(f"Day: {input_workout.day}")
+    print("-----------------------------------------------------------------------------------------------------------")
+    for exercise in input_workout.exercises:
+        print_exercise(exercise)
+
+
+def print_workout_plan(input_workout_plan):
+    print("-----------------------------------------------------------------------------------------------------------")
+    print(f"Name:   {input_workout_plan.name}   |   Weeks left:    {input_workout_plan.length_weeks}")
+    for workout in input_workout_plan.workouts:
+        print_workout(workout)

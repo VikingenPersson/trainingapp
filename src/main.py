@@ -4,7 +4,7 @@ from training.training_classes import (
     Exercise,
     ExerciseSet
 )
-from training.training_functions import create_workout_plan, clear_terminal
+from training.training_functions import create_workout_plan, clear_terminal, print_workout_plan
 import atexit
 import dill
 
@@ -40,7 +40,10 @@ def main():
         workout_plans.append(first_workout_plan())
     if not workout_plans:
         workout_plans.append(first_workout_plan())
-    input("Press enter to exit")
+    input("Press enter to show workout plan: ")
+    clear_terminal()
+    print_workout_plan(workout_plans[0])
+    input("Press enter to exit program: ")
 
 
 if __name__ == "__main__":
