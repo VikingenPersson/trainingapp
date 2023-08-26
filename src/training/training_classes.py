@@ -49,7 +49,7 @@ class Exercise:
             training_set.reps = int(round(0 - (((input_weight / one_rep_max) - 1.0278) / 0.0278) - 3))
         self.weight = input_weight
 
-    def change_rir(self, new_rir=self.rir-1):
+    def change_rir(self, new_rir=3):
         self.rir = new_rir
 
 

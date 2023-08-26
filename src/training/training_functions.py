@@ -1,9 +1,10 @@
-from training_classes import (
+from training.training_classes import (
     WorkoutPlan,
     Workout,
     Exercise,
     ExerciseSet,
 )
+import os
 
 available_days = (
         "Monday",
@@ -22,10 +23,13 @@ available_muscle_groups = (
         "Biceps",
         "Triceps",
         "Abs",
-        "Quads"
+        "Quads",
         "Hamstrings",
         "Calves",
     )
+
+def clear_terminal():
+    os.system("clr||clear")
 
 def select_day():
     print("Select one of the following days:")
@@ -37,7 +41,7 @@ def select_day():
     except ValueError:
         print("Looks like you didn\'t enter a number, Try again.")
         selected_day = select_day()
-    if selected_day < 1 or selected_day >= len(available_days):
+    if selected_day < 0 or selected_day >= len(available_days):
         print("Looks like you entered a non existing day, Try again.")
         selected_day = select_day()
     return selected_day
@@ -46,6 +50,7 @@ def select_name_exercise():
     return input("Enter a name for the exercise: ")
 
 def select_muscle_group():
+    print("Select one of the following muscle groups")
     for muscle in range(len(available_muscle_groups)):
         print(f"{muscle+1}. {available_muscle_groups[muscle]}")
     selected_muscle = input("Enter number: ")
@@ -54,7 +59,7 @@ def select_muscle_group():
     except ValueError:
         print("Looks like you didn\'t enter a number, Try again.")
         selected_muscle = select_muscle_group()
-    if selected_muscle < 1 or selected_muscle >= len(available_muscle_groups):
+    if selected_muscle < 0 or selected_muscle >= len(available_muscle_groups):
         print("Looks like the muscle group you entered doesn\'t exist, Try again.")
         selected_muscle = select_muscle_group()
     return selected_muscle
@@ -89,7 +94,7 @@ def create_workout():
         another_exercise = input("Would you like to add another exercise? [y/N]: ").lower()
         if another_exercise == "y":
             exercises.append(create_exercise())
-        elif another_exercise == "" or another_exercise == "":
+        elif another_exercise == "" or another_exercise == "n":
             break
         else:
             print("Please enter y for yes or n for no")
