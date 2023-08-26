@@ -1,6 +1,7 @@
 class WorkoutPlan:
-    def __init__(self, input_workouts=None, input_length=4):
+    def __init__(self, input_name="", input_workouts=None, input_length=4):
         input_workouts = [Workout()] if input_workouts is None else input_workouts
+        self.name = input_name
         self.workouts = input_workouts
         self.length_weeks = input_length
 
