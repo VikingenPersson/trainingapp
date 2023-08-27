@@ -134,26 +134,93 @@ def create_workout_plan():
 # Visual functions for printing in terminal
 
 def print_set(input_set):
-    print(f"reps:               {input_set.reps}")
+    print(f"reps:\t\t\t{input_set.reps}")
 
 
-def print_exercise(input_exercise):
-    print(f"Exercise:   {input_exercise.name}   {input_exercise.muscle_group}")
-    print(f"Weight: {input_exercise.weight}     |        rir={input_exercise.rir}")
-    for wset in input_exercise.sets:
+def print_exercise_detailed(input_exercise):
+    print(f"Exercise:\t{input_exercise.name}\t{input_exercise.muscle_group}")
+    print(f"Weight:\t{input_exercise.show_weight}\t|\trir={input_exercise.rir}")
+    for wset in input_exercise.show_sets:
         print_set(wset)
-    print("-----------------------------------------------------------------------------------------------------------")
+    print__divider()
 
 
 def print_workout(input_workout):
-    print(f"Day: {input_workout.day}")
-    print("-----------------------------------------------------------------------------------------------------------")
+    print(f"Day:\t{input_workout.day}")
+    print__divider()
     for exercise in input_workout.exercises:
-        print_exercise(exercise)
+        print_exercise_detailed(exercise)
 
 
 def print_workout_plan(input_workout_plan):
-    print("-----------------------------------------------------------------------------------------------------------")
-    print(f"Name:   {input_workout_plan.name}   |   Weeks left:    {input_workout_plan.length_weeks}")
+    print__divider()
+    print(f"Name:\t{input_workout_plan.name}\t|\tWeeks left:\t{input_workout_plan.length_weeks}")
     for workout in input_workout_plan.workouts:
         print_workout(workout)
+
+def print__divider():
+    print("-----------------------------------------------------------------------------------------------------------")
+
+
+def main_menu(workout_plan):
+    clear_terminal()
+    print__divider()
+    print("1. Start Workout\t2. Show Workout plan\t3. Edit Workout plan")
+    print("4. Exit program")
+    choice = int(input("Select option: "))
+    if choice == 1:
+        clear_terminal()
+        start_workout(workout_plan)
+    elif choice == 2:
+        clear_terminal()
+        print_workout_plan(workout_plan)
+        input("Press enter to go back to main menu")
+    elif choice == 3:
+        print("Sorry that option isn\'t implemented yet.")
+        input("Press enter to continue: ")
+    elif choice == 4:
+        exit()
+    else:
+        input("Wrong input press enter to try again: ")
+
+
+def start_workout(workout_plan):
+    current_workout = None
+    while True:
+        for workout in workout_plan.workouts:
+            if not workout.finished:
+                current_workout = workout
+                break
+        if current_workout is None:
+            workout_plan.new_week()
+        else:
+            break
+    for exercise in current_workout.exercises:
+        while True:
+            print_exercise_detailed(exercise)
+            print(f"1. Change Weight\t2. Enter Reps for sets")
+            choice = int(input("Select option: "))
+            if choice == 1:
+                exercise.change_weight(input_weight=int(input("Enter new weight:")))
+                clear_terminal()
+                continue
+            elif choice == 2:
+                current_set = 1
+                for wset in exercise.show_sets:
+                    clear_terminal()
+                    print_exercise_detailed(exercise)
+                    wset.reps = int(input(f"Enter amount of reps you did for set {current_set}: "))
+                    current_set += 1
+                break
+            else:
+                input("Wrong input press enter to try again: ")
+                clear_terminal()
+        clear_terminal()
+        exercise.finish_exercise()
+    current_workout.finished = True
+    workouts_finished = 0
+    for workout in workout_plan.workouts:
+        if workout.finished:
+            workouts_finished += 1
+    if workouts_finished == len(workout_plan.workouts):
+        workout_plan.new_week()

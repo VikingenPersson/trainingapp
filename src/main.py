@@ -4,13 +4,9 @@ from training.training_classes import (
     Exercise,
     ExerciseSet
 )
-from training.training_functions import create_workout_plan, clear_terminal, print_workout_plan
+from training.training_functions import create_workout_plan, main_menu, clear_terminal
 import atexit
 import dill
-
-
-def exit_handler(workouts_to_save):
-    save_to_file(workouts_to_save)
 
 
 def save_to_file(workout):
@@ -30,7 +26,7 @@ def first_workout_plan():
 
 def main():
     workout_plans = []
-    atexit.register(exit_handler, workout_plans)
+    atexit.register(save_to_file, workout_plans)
     try:
         workout_plans_list = load_from_file()
         for workout_plan in workout_plans_list:
@@ -40,10 +36,9 @@ def main():
         workout_plans.append(first_workout_plan())
     if not workout_plans:
         workout_plans.append(first_workout_plan())
-    input("Press enter to show workout plan: ")
     clear_terminal()
-    print_workout_plan(workout_plans[0])
-    input("Press enter to exit program: ")
+    while True:
+        main_menu(workout_plans[0])
 
 
 if __name__ == "__main__":
