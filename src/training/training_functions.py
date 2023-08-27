@@ -7,29 +7,31 @@ from training.training_classes import (
 import os
 
 available_days = (
-        "Monday",
-        "Tuesday",
-        "Wednesday",
-        "Thursday",
-        "Friday",
-        "Saturday",
-        "Sunday",
-    )
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday",
+)
 
 available_muscle_groups = (
-        "Chest",
-        "Back",
-        "Shoulders",
-        "Biceps",
-        "Triceps",
-        "Abs",
-        "Quads",
-        "Hamstrings",
-        "Calves",
-    )
+    "Chest",
+    "Back",
+    "Shoulders",
+    "Biceps",
+    "Triceps",
+    "Abs",
+    "Quads",
+    "Hamstrings",
+    "Calves",
+)
+
 
 def clear_terminal():
     os.system("clr||clear")
+
 
 def select_day():
     print("Select one of the following days:")
@@ -37,7 +39,7 @@ def select_day():
         print(f"{day + 1}. {available_days[day]}")
     selected_day = input("Enter number: ")
     try:
-        selected_day = int(selected_day)-1
+        selected_day = int(selected_day) - 1
     except ValueError:
         print("Looks like you didn\'t enter a number, Try again.")
         selected_day = select_day()
@@ -46,16 +48,18 @@ def select_day():
         selected_day = select_day()
     return selected_day
 
+
 def select_name_exercise():
     return input("Enter a name for the exercise: ")
+
 
 def select_muscle_group():
     print("Select one of the following muscle groups")
     for muscle in range(len(available_muscle_groups)):
-        print(f"{muscle+1}. {available_muscle_groups[muscle]}")
+        print(f"{muscle + 1}. {available_muscle_groups[muscle]}")
     selected_muscle = input("Enter number: ")
     try:
-        selected_muscle = int(selected_muscle)-1
+        selected_muscle = int(selected_muscle) - 1
     except ValueError:
         print("Looks like you didn\'t enter a number, Try again.")
         selected_muscle = select_muscle_group()
@@ -64,11 +68,13 @@ def select_muscle_group():
         selected_muscle = select_muscle_group()
     return selected_muscle
 
+
 def create_sets(number_of_sets):
     list_of_sets = []
     for i in range(number_of_sets):
         list_of_sets.append(ExerciseSet())
     return list_of_sets
+
 
 def select_number_of_sets():
     number_of_sets = input("Enter amount of sets for this exercise: ")
@@ -79,6 +85,7 @@ def select_number_of_sets():
         number_of_sets = select_number_of_sets()
     return number_of_sets
 
+
 def create_exercise():
     input_name = select_name_exercise()
     input_muscle = available_muscle_groups[select_muscle_group()]
@@ -86,10 +93,10 @@ def create_exercise():
     list_of_sets = create_sets(number_of_sets)
     return Exercise(input_name=input_name, input_muscle_group=input_muscle, input_sets=list_of_sets)
 
+
 def create_workout():
     day = available_days[select_day()]
-    exercises = []
-    exercises.append(create_exercise())
+    exercises = [create_exercise()]
     while True:
         another_exercise = input("Would you like to add another exercise? [y/N]: ").lower()
         if another_exercise == "y":
@@ -100,11 +107,10 @@ def create_workout():
             print("Please enter y for yes or n for no")
     return Workout(input_exercises=exercises, input_day=day)
 
+
 def create_workout_plan():
     name = input("Enter a name for this workout plan: ")
-    length_of_plan = ""
-    list_workouts = []
-    list_workouts.append(create_workout())
+    list_workouts = [create_workout()]
     while True:
         another_workout = input("Would you like to create another workout? [y/N]: ").lower()
         if another_workout == "y":
@@ -123,12 +129,11 @@ def create_workout_plan():
             except ValueError:
                 print("Looks like you didn\'t enter a number, try again.")
 
-
         if length_of_plan < 4 or length_of_plan > 6:
             print("please select a number between 4 and 6")
         else:
             break
-    return WorkoutPlan(input_name=name,input_workouts=list_workouts, input_length=length_of_plan)
+    return WorkoutPlan(input_name=name, input_workouts=list_workouts, input_length=length_of_plan)
 
 
 # Visual functions for printing in terminal
@@ -158,8 +163,108 @@ def print_workout_plan(input_workout_plan):
     for workout in input_workout_plan.workouts:
         print_workout(workout)
 
+
 def print__divider():
     print("-----------------------------------------------------------------------------------------------------------")
+
+
+def exercise_eval(exercise, muscle_soreness=2):
+    joint_pain = 1
+    pump = 1
+    training_intensity = 1
+    while True:
+        print("Did you feel any joint pain during the exercise?")
+        print("1. No pain")
+        print("2. A little pain")
+        print("3. Moderate amount of pain")
+        print("4. Alot of pain")
+        choice = input("Select option: ")
+        try:
+            choice = int(choice)
+        except ValueError:
+            input("Wrong input press enter to try again: ")
+            clear_terminal()
+            continue
+        if choice < 1 or choice > 4:
+            input("Wrong input press enter to try again: ")
+            clear_terminal()
+        else:
+            joint_pain = choice
+            clear_terminal()
+            break
+    while True:
+        print("How was you pump after the exercise?")
+        print("1. no/low pump")
+        print("2. Okay pump")
+        print("3. Awesome pump")
+        choice = input("Select option: ")
+        try:
+            choice = int(choice)
+        except ValueError:
+            input("Wrong input press enter to try again: ")
+            clear_terminal()
+            continue
+        if choice < 1 or choice > 3:
+            input("Wrong input press enter to try again: ")
+            clear_terminal()
+        else:
+            pump = choice
+            clear_terminal()
+            break
+    while True:
+        print("How was the training intensity?")
+        print("1. Easy")
+        print("2. Pretty good")
+        print("3. Pushed my limits")
+        print("4. Too much")
+        choice = input("Select option: ")
+        try:
+            choice = int(choice)
+        except ValueError:
+            input("Wrong input press enter to try again: ")
+            clear_terminal()
+            continue
+        if choice < 1 or choice > 4:
+            input("Wrong input press enter to try again: ")
+            clear_terminal()
+        else:
+            training_intensity = choice
+            clear_terminal()
+            break
+    if joint_pain > 3:
+        exercise.change_weight(exercise.show_weight * 0.80, True)
+    if training_intensity > 3:
+        exercise.show_sets.pop()
+    elif training_intensity < 2:
+        exercise.show_sets.append(ExerciseSet())
+    if pump <= 1 and muscle_soreness < 4:
+        exercise.show_sets.append(ExerciseSet())
+    if muscle_soreness > 3:
+        exercise.show_sets.pop()
+    elif muscle_soreness < 2:
+        exercise.show_sets.append(ExerciseSet())
+
+
+def muscle_soreness_eval(muscle_group):
+    while True:
+        print(f"How was the muscle soreness in your {muscle_group} after your last workout?")
+        print("1. Never got sore")
+        print("2. Recovered a while ago")
+        print("3. Recovered just in time")
+        print("4. Still sore")
+        choice = input("Select option: ")
+        try:
+            choice = int(choice)
+        except ValueError:
+            input("Wrong input press enter to try again: ")
+            clear_terminal()
+            continue
+        if choice < 1 or choice > 4:
+            input("Wrong input press enter to try again: ")
+            clear_terminal()
+        else:
+            clear_terminal()
+            return choice
 
 
 def main_menu(workout_plan):
@@ -195,13 +300,25 @@ def start_workout(workout_plan):
             workout_plan.new_week()
         else:
             break
+    muscle_groups_for_workout = []
+    muscle_soreness_dic = {muscle: 2 for muscle in available_muscle_groups}
     for exercise in current_workout.exercises:
+        if exercise.muscle_group not in muscle_groups_for_workout:
+            muscle_groups_for_workout.append(exercise.muscle_group)
+
+    for exercise in current_workout.exercises:
+        if exercise.muscle_group in muscle_groups_for_workout and \
+                workout_plan.length_weeks < workout_plan.original_length:
+            clear_terminal()
+            muscle_soreness = muscle_soreness_eval(exercise.muscle_group)
+            muscle_soreness_dic[exercise.muscle_group] = muscle_soreness
+            muscle_groups_for_workout.remove(exercise.muscle_group)
         while True:
             print_exercise_detailed(exercise)
             print(f"1. Change Weight\t2. Enter Reps for sets")
             choice = int(input("Select option: "))
             if choice == 1:
-                exercise.change_weight(input_weight=int(input("Enter new weight:")))
+                exercise.change_weight(input_weight=int(input("Enter new weight: ")))
                 clear_terminal()
                 continue
             elif choice == 2:
@@ -216,6 +333,7 @@ def start_workout(workout_plan):
                 input("Wrong input press enter to try again: ")
                 clear_terminal()
         clear_terminal()
+        exercise_eval(exercise, muscle_soreness_dic[exercise.muscle_group])
         exercise.finish_exercise()
     current_workout.finished = True
     workouts_finished = 0

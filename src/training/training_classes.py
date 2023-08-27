@@ -22,6 +22,14 @@ class WorkoutPlan:
         if self.length_weeks <= 0:
             self.length_weeks = self.original_length
         for workout in self.workouts:
+            for exercise in workout.exercises:
+                for wset in exercise.target_sets:
+                    if exercise.rir > rir_template[6 - self.length_weeks]:
+                        wset.reps += 2
+                    else:
+                        wset.reps += 1
+                exercise.reset_show_sets()
+        for workout in self.workouts:
             workout.finished = False
             for exercise in workout.exercises:
                 exercise.rir = rir_template[6 - self.length_weeks]
@@ -56,9 +64,11 @@ class Exercise:
         for i in range(number_of_sets):
             self.target_sets.append(ExcerciseSet(0))
 
-    def change_weight(self, input_weight):
+    def change_weight(self, input_weight, joint_pain=False):
         # Calculate new number of reps using "The Brzycki Equation"
         # Need to add checks that weight change isn't too drastic, if it is set reps to 0
+        if joint_pain:
+            self.target_weight = self.show_weight
         if input_weight == self.target_weight:
             self.reset_show_sets()
             self.show_weight = self.target_weight
