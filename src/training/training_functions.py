@@ -50,6 +50,7 @@ def select_day():
 
 
 def select_name_exercise():
+    clear_terminal()
     return input("Enter a name for the exercise: ")
 
 
@@ -114,6 +115,7 @@ def create_workout_plan():
     while True:
         another_workout = input("Would you like to create another workout? [y/N]: ").lower()
         if another_workout == "y":
+            clear_terminal()
             list_workouts.append(create_workout())
         elif another_workout == "" or another_workout == "n":
             break
@@ -302,17 +304,23 @@ def start_workout(workout_plan):
             break
     muscle_groups_for_workout = []
     muscle_soreness_dic = {muscle: 2 for muscle in available_muscle_groups}
+
+    # Creates a list of muscle groups in the workout
     for exercise in current_workout.exercises:
         if exercise.muscle_group not in muscle_groups_for_workout:
             muscle_groups_for_workout.append(exercise.muscle_group)
 
+    # Main loop
     for exercise in current_workout.exercises:
+        # Creates a muscle soreness score, but only for the first exercise in each muscle group
+        # saves the score to a dictionary
         if exercise.muscle_group in muscle_groups_for_workout and \
                 workout_plan.length_weeks < workout_plan.original_length:
             clear_terminal()
             muscle_soreness = muscle_soreness_eval(exercise.muscle_group)
             muscle_soreness_dic[exercise.muscle_group] = muscle_soreness
             muscle_groups_for_workout.remove(exercise.muscle_group)
+
         while True:
             print_exercise_detailed(exercise)
             print(f"1. Change Weight\t2. Enter Reps for sets")
